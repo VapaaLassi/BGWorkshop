@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Board Game Workshop</title>
+    <style>
+
+    </style>
+</head>
+<body>
+
+    <h1>Game Mechanics</h1>
+    <div id="table-container"></div>
+    <div id="themes-table-container"></div>
+
+    <script>
+        const csvData = `Mechanic,Summary,Link
+Tableau Building;"Tableau building is a board game mechanic where players build and arrange a personal collection of cards, tiles, or items on their individual player boards, known as a “tableau.” These cards or items often create an engine, offering abilities or bonuses that help players achieve their game objectives.";https://mechanicsbg.com/mechanics/tableau-building/
+Worker Placement;"Worker placement is a popular game mechanic where players assign their limited workers (meeples, tokens, or characters) to specific action spaces on the board. Each action provides unique benefits, but once a space is occupied, it’s usually blocked from other players until the next round, encouraging strategic decision-making and competitive planning.";https://mechanicsbg.com/mechanics/worker-placement/
+Deck Building;"Deck building is a card game mechanic where players start with a small, basic deck and gradually add new cards to improve it, building a unique deck over the course of the game. Each player’s deck is personal and grows as they make strategic choices about which cards to add.";https://mechanicsbg.com/mechanics/deck-building/
+Set Collection;"Set collection is a board game mechanic where players aim to gather groups of similar items—such as cards, tiles, or tokens—to complete sets. Sets typically earn players points or rewards, with different sets often having unique values or abilities.";https://mechanicsbg.com/mechanics/set-collection/
+Hand Management;"Hand management is a strategic game mechanic where players make decisions about when and how to play or hold onto the cards in their hand to maximize the effectiveness of each play. Efficient use of cards is crucial to achieving game objectives, as players balance short-term actions with long-term goals.";https://mechanicsbg.com/mechanics/hand-management/
+Trick Taking;"Trick-taking is a card game mechanic where players each play one card per round (a “trick”), with the highest card winning the trick based on the game’s rules or suit hierarchy. The objective typically involves winning as many tricks as possible or reaching a specific target score through strategic card play.";https://mechanicsbg.com/mechanics/trick-taking/
+Open Drafting;"Open drafting is a mechanic where players take turns selecting cards, tiles, or other game components from a shared pool that all players can see. Each choice is visible to everyone, creating a blend of strategy and interaction as players weigh their selections while considering potential choices for others.";https://mechanicsbg.com/mechanics/open-drafting/
+Variable Player Powers;"Variable player powers is a game mechanic where each player has unique abilities or starting conditions that set them apart from others, creating asymmetrical strategies and roles. This mechanic adds depth to gameplay, as players leverage their unique powers to gain an advantage and adapt their strategies.";https://mechanicsbg.com/mechanics/variable-player-powers/
+Deduction;"Deduction is a board game mechanic that challenges players to discover hidden information through logical reasoning and the systematic elimination of possibilities";https://mechanicsbg.com/mechanics/deduction/
+Player Elimination;"In player elimination games, participants can be removed from play when they fail to meet conditions or are defeated. While common in classics like Risk, modern designs often mitigate downtime for eliminated players by ensuring quick rounds or alternate roles.";https://mechanicsbg.com/mechanics/player-elimination/
+Closed Drafting;"Closed drafting is a board game mechanic where players select cards, tiles, or other resources from a hidden pool, typically passing the unselected options to others. The element of hidden information adds suspense, strategy, and unpredictability as players make choices without full knowledge of their opponents’ decisions.";https://mechanicsbg.com/mechanics/closed-drafting/
+Roll and Move;"Players roll dice to determine their movement across the board. While simple and classic, as in Monopoly, modern games often enhance this mechanic with added strategy, such as choosing paths or modifying rolls.";https://mechanicsbg.com/mechanics/roll-and-move/
+Push-Your-Luck;"This mechanic encourages players to take risks for greater rewards while tempting fate. In games like Can’t Stop, players must decide whether to bank their gains or gamble for more, knowing a single mistake could cost them everything.";https://mechanicsbg.com/mechanics/push-your-luck/
+Negotiation;"Negotiation mechanics let players make deals, alliances, or trades, often creating dynamic and unpredictable gameplay. Games like Cosmic Encounter thrive on this mechanic, rewarding clever persuasion and social skills.";https://mechanicsbg.com/mechanics/negotiation/
+Tug of War;"In tug-of-war mechanics, players push and pull control of a resource, area, or game element back and forth. This often creates high tension, as seen in Twilight Struggle, where influence is constantly contested on a shared board.";https://mechanicsbg.com/mechanics/tug-of-war/
+King of the Hill;"Players compete to control a specific area or achieve dominance over others in this mechanic. Risk and Small World employ this dynamic, where maintaining control over a contested area or goal is key to victory.";https://mechanicsbg.com/mechanics/king-of-the-hill/
+Hidden Movement;"This mechanic keeps certain player movements secret, creating suspense and deduction opportunities. Games like Letters from Whitechapel use hidden movement to heighten tension and strategy as players hunt or evade.";https://mechanicsbg.com/mechanics/hidden-movement/
+Auction-Based;"Players bid for turn order in this mechanic, spending resources to secure a preferred position. It adds layers of strategy as players weigh the benefits of acting earlier against the cost of their bid. Games like Ra and Power Grid highlight this engaging approach to turn order.";https://mechanicsbg.com/mechanics/auction-based/
+Catch the Leader;"This mechanic helps level the playing field by implementing systems that hinder the leading player or benefit those lagging behind. Games like Mario Kart use it to keep gameplay competitive and exciting, preventing runaway victories.";https://mechanicsbg.com/mechanics/catch-the-leader/
+Area Influence;"Players compete to have the most influence over a region or area. This mechanic, found in games like El Grande, emphasizes strategic placement and timing, as players vie for dominance without necessarily owning all resources.";https://mechanicsbg.com/mechanics/area-influence/
+Tile-Laying;"Tile-laying involves placing tiles to create patterns, networks, or territories. Carcassonne popularized this mechanic, where players strategically place tiles to expand their influence while scoring points for completed features like cities or roads.";https://mechanicsbg.com/mechanics/tile-laying/
+Stat-Based;"Turn order is determined by player stats, such as initiative or a character’s speed. This mechanic adds a thematic layer, as seen in Gloomhaven, where faster characters act before slower ones, reflecting their agility or preparation in the game world.";https://mechanicsbg.com/mechanics/stat-based/
+Betting and Bluffing;"Players wager resources or make bold claims to deceive opponents or secure gains. Games like Sheriff of Nottingham rely on this mechanic to create tension and humor, as players weigh risks and rewards.";https://mechanicsbg.com/mechanics/betting-and-bluffing/
+Network Building;"This mechanic challenges players to create interconnected systems, like transportation routes or resource pipelines. Games like Ticket to Ride excel here, encouraging players to efficiently link locations while blocking opponents’ plans.";https://mechanicsbg.com/mechanics/network-building/
+Trading;"Players exchange resources, cards, or benefits to further their goals. Games like Catan thrive on trading, fostering interaction and negotiation as players form temporary alliances to achieve mutual benefits.";https://mechanicsbg.com/mechanics/trading/
+End-Game Bonuses;"These bonuses are rewards granted at the end of the game based on specific achievements, such as completed sets or objectives. Games like Terraforming Mars use them to encourage long-term planning and add suspense to the final scoring.";https://mechanicsbg.com/mechanics/endgame-bonuses/
+Hidden Roles;"Hidden roles assign players secret identities or goals, creating intrigue and deduction. Games like Werewolf and The Resistance thrive on this mechanic, as players try to uncover allies and enemies through observation and bluffing.";https://mechanicsbg.com/mechanics/hidden-roles/
+Fixed Rounds;"Games with this mechanic have a predetermined number of rounds, providing structure and a clear end point. Players must maximize efficiency within this timeframe, as seen in 7 Wonders, where each age is played over a set number of turns.";https://mechanicsbg.com/mechanics/fixed-rounds/`;
+
+        const themedata = `Theme
+        Fantasy
+        Sci - fi
+        Horror
+        Fairytale
+        Romance
+        Medieval
+The Victorian Era
+        Internet & Cyberpunk
+Time Travel
+Natural Disaster
+        Steampunk
+Post Apocalypse
+        School
+        Circus
+        Desert
+        Arctic
+        Underwater
+        Jungle
+        Utopia
+        Dystopia
+        Farming
+        Gardening
+        Mining
+        Religion
+        Food
+        Music
+        Art
+        Family
+        Sport
+        Travel
+        Heist
+        Zombies
+        Merchants
+        Animals
+        Wizards
+        Spies
+        Inventors
+        Vikings
+        Pirates
+        Dreams
+        Superheroes
+        Detectives
+Giant Monsters
+        Finland
+Game Industry`;
+        // -------------------------------------------------------
+
+        function parseCSV(data) {
+            const rows = data.split('\n');
+            const result = rows.map(row => row.split(';'));
+            return result;
+        }
+
+
+        var parsedData = parseCSV(csvData);
+        console.log(parsedData);
+
+
+        var mechanicName = parsedData[5][0];
+        var mechanicSummary = parsedData[5][1];
+        var mechanicLink = parsedData[5][2];
+
+        console.log(mechanicName);
+        console.log(mechanicSummary);
+        console.log(mechanicLink);
+
+
+        parsedData = parseCSV(themedata);
+        //console.log(themedata);
+
+
+    </script>
+
+</body>
+</html>
