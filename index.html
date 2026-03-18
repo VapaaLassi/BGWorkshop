@@ -10,12 +10,20 @@
 <body>
 
     <h1>Game Mechanics</h1>
-    <div id="table-container"></div>
-    <div id="themes-table-container"></div>
+    <div id="mechanics-container">
+        <div id="mechanic0" class="mechanic-card"></div>
+        <div id="mechanic1" class="mechanic-card"></div>
+        <div id="mechanic2" class="mechanic-card"></div>
+    </div>
+
+    <h1>Themes</h1>
+    <div id="themes-container">
+        <div id="theme0" class="theme-card"></div>
+        <div id="theme1" class="theme-card"></div>
+    </div>
 
     <script>
-        const csvData = `Mechanic,Summary,Link
-Tableau Building;"Tableau building is a board game mechanic where players build and arrange a personal collection of cards, tiles, or items on their individual player boards, known as a “tableau.” These cards or items often create an engine, offering abilities or bonuses that help players achieve their game objectives.";https://mechanicsbg.com/mechanics/tableau-building/
+        const csvData = `Tableau Building;"Tableau building is a board game mechanic where players build and arrange a personal collection of cards, tiles, or items on their individual player boards, known as a “tableau.” These cards or items often create an engine, offering abilities or bonuses that help players achieve their game objectives.";https://mechanicsbg.com/mechanics/tableau-building/
 Worker Placement;"Worker placement is a popular game mechanic where players assign their limited workers (meeples, tokens, or characters) to specific action spaces on the board. Each action provides unique benefits, but once a space is occupied, it’s usually blocked from other players until the next round, encouraging strategic decision-making and competitive planning.";https://mechanicsbg.com/mechanics/worker-placement/
 Deck Building;"Deck building is a card game mechanic where players start with a small, basic deck and gradually add new cards to improve it, building a unique deck over the course of the game. Each player’s deck is personal and grows as they make strategic choices about which cards to add.";https://mechanicsbg.com/mechanics/deck-building/
 Set Collection;"Set collection is a board game mechanic where players aim to gather groups of similar items—such as cards, tiles, or tokens—to complete sets. Sets typically earn players points or rewards, with different sets often having unique values or abilities.";https://mechanicsbg.com/mechanics/set-collection/
@@ -44,51 +52,50 @@ End-Game Bonuses;"These bonuses are rewards granted at the end of the game based
 Hidden Roles;"Hidden roles assign players secret identities or goals, creating intrigue and deduction. Games like Werewolf and The Resistance thrive on this mechanic, as players try to uncover allies and enemies through observation and bluffing.";https://mechanicsbg.com/mechanics/hidden-roles/
 Fixed Rounds;"Games with this mechanic have a predetermined number of rounds, providing structure and a clear end point. Players must maximize efficiency within this timeframe, as seen in 7 Wonders, where each age is played over a set number of turns.";https://mechanicsbg.com/mechanics/fixed-rounds/`;
 
-        const themedata = `Theme
-        Fantasy
-        Sci - fi
-        Horror
-        Fairytale
-        Romance
-        Medieval
+        const themedata = `Fantasy
+            Sci - fi
+            Horror
+            Fairytale
+            Romance
+            Medieval
 The Victorian Era
-        Internet & Cyberpunk
+            Internet & Cyberpunk
 Time Travel
 Natural Disaster
-        Steampunk
+            Steampunk
 Post Apocalypse
-        School
-        Circus
-        Desert
-        Arctic
-        Underwater
-        Jungle
-        Utopia
-        Dystopia
-        Farming
-        Gardening
-        Mining
-        Religion
-        Food
-        Music
-        Art
-        Family
-        Sport
-        Travel
-        Heist
-        Zombies
-        Merchants
-        Animals
-        Wizards
-        Spies
-        Inventors
-        Vikings
-        Pirates
-        Dreams
-        Superheroes
-        Detectives
+            School
+            Circus
+            Desert
+            Arctic
+            Underwater
+            Jungle
+            Utopia
+            Dystopia
+            Farming
+            Gardening
+            Mining
+            Religion
+            Food
+            Music
+            Art
+            Family
+            Sport
+            Travel
+            Heist
+            Zombies
+            Merchants
+            Animals
+            Wizards
+            Spies
+            Inventors
+            Vikings
+            Pirates
+            Dreams
+            Superheroes
+            Detectives
 Giant Monsters
-        Finland
+            Finland
 Game Industry`;
         // -------------------------------------------------------
 
@@ -102,17 +109,37 @@ Game Industry`;
         var parsedData = parseCSV(csvData);
         console.log(parsedData);
 
+        const shuffled = [...parsedData].sort(() => 0.5 - Math.random());
+        const selectedMechanics = shuffled.slice(0, 3);
 
-        var mechanicName = parsedData[5][0];
-        var mechanicSummary = parsedData[5][1];
-        var mechanicLink = parsedData[5][2];
+        selectedMechanics.forEach((mechanic, index) => {
+            const [name, summary, link] = mechanic;
 
-        console.log(mechanicName);
-        console.log(mechanicSummary);
-        console.log(mechanicLink);
+            const container = document.getElementById(`mechanic${index}`);
 
+            container.innerHTML = `
+                <h3>${name}</h3>
+                <p>${summary}</p>
+                <a href="${link}" target="_blank">View Mechanic</a>
+        `;
+        });
 
-        parsedData = parseCSV(themedata);
+        const parsedThemes = parseCSV(themedata);
+
+        console.log(parsedThemes);
+
+        const shuffledThemes = [...parsedThemes].sort(() => 0.5 - Math.random());
+        const selectedThemes = shuffledThemes.slice(0, 2);
+
+        selectedThemes.forEach((theme, index) => {
+            const name = theme;
+
+            const container = document.getElementById(`theme${index}`);
+
+            container.innerHTML = `
+                <h3>${name}</h3>
+        `;
+        });
         //console.log(themedata);
 
 
