@@ -99,6 +99,35 @@
                 grid-template-columns: 1fr; /* Force single column on small screens */
             }
         }
+
+        /* Updated Reroll Button Styling */
+        button {
+            margin-top: 15px;
+            padding: 8px 20px;
+            /* Using the blue from your links for consistency */
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 20px; /* Rounded pill shape looks more modern */
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+            /* This stops the "silly" full-width behavior */
+            align-self: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(52, 152, 219, 0.2);
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        /* Style for when the button is hidden/removed */
+        button:disabled {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -135,7 +164,7 @@ Elimination;The game revolves around players getting eliminated from the game
 Push your luck;The game has lements that drive players to take bigger and bigger risks, knowing that failure is an increasingly likely outcome.
 Randomness;The element of randomness (through dice, cards, color of someone's shirt etc.) is central to the gameplay experience.
 Inspired by real life;The game emulates or simulates something from the shared world we live in.
-Worker Placement;Worker placement is a popular game mechanic where players assign their limited workers (meeples, tokens, or characters) to specific action spaces on the board. Each action provides unique benefits, but once a space is occupied, it’s usually blocked from other players until the next round, encouraging strategic decision-making and competitive planning.
+Worker Placement;Worker placement is a popular game mechanic where players assign their limited workers (meeples, tokens, or characters) to specific action spaces on the board. Each action provides unique benefits, but once a space is occupied, it's usually blocked from other players until the next round, encouraging strategic decision-making and competitive planning.
 Production;Producing resources is a central part of the game.
 Tug of War;The game has elements that have two end points, where moving it towards one makes it further from the other.
 Hidden information;There's information in the game that none of the players have at the beginning of the game.
@@ -204,40 +233,91 @@ Game Industry`;
         }
 
 
-        var parsedData = parseCSV(csvData);
-        console.log(parsedData);
+        // 1. Setup global state
+        let mechanicPointer = 0;
+        let themePointer = 0;
+        const rerollLimit = 2;
+        const themererollLimit = 1;
+        const mechanicRerolls = [0, 0, 0, 0]; // Tracking for 4 boxes
+        const themeRerolls = [0, 0];          // Tracking for 2 boxes
 
-        const shuffled = [...parsedData].sort(() => 0.5 - Math.random());
-        const selectedMechanics = shuffled.slice(0, 4);
+        // Parse and Shuffle your data
+        const allMechanics = parseCSV(csvData).sort(() => 0.5 - Math.random());
+        const allThemes = parseCSV(themedata).sort(() => 0.5 - Math.random());
 
-        selectedMechanics.forEach((mechanic, index) => {
-            const [name, summary, link] = mechanic;
+        // Initial Render
+        function init() {
+            for (let i = 0; i < 4; i++) {
+                updateBox('mechanic', i);
+            }
+            for (let i = 0; i < 2; i++) {
+                updateBox('theme', i);
+            }
+        }
 
-            const container = document.getElementById(`mechanic${index}`);
+        function updateBox(type, index) {
+            const container = document.getElementById(`${type}${index}`);
+            let data, currentPointer;
 
-            container.innerHTML = `
-                <h3>${name}</h3>
-                <p>${summary}</p>
+            if (type === 'mechanic') {
+                data = allMechanics[mechanicPointer];
+                mechanicPointer++;
+
+                const [name, summary] = data;
+                container.innerHTML = `
+            <h3>${name}</h3>
+            <p>${summary}</p>
+            <button onclick="handleReroll('mechanic', ${index})" id="${type}-btn-${index}">Reroll (${rerollLimit - mechanicRerolls[index]} left)</button>
         `;
-        });
+            } else {
+                data = allThemes[themePointer];
+                themePointer++;
 
-        const parsedThemes = parseCSV(themedata);
-
-        console.log(parsedThemes);
-
-        const shuffledThemes = [...parsedThemes].sort(() => 0.5 - Math.random());
-        const selectedThemes = shuffledThemes.slice(0, 2);
-
-        selectedThemes.forEach((theme, index) => {
-            const name = theme;
-
-            const container = document.getElementById(`theme${index}`);
-
-            container.innerHTML = `
-                <h3>${name}</h3>
+                container.innerHTML = `
+            <h3>${data}</h3>
+            <button onclick="handleReroll('theme', ${index})" id="${type}-btn-${index}">Reroll (${themererollLimit - themeRerolls[index]} left)</button>
         `;
-        });
-        //console.log(themedata);
+            }
+        }
+
+        function handleReroll(type, index) {
+            if (type === 'mechanic') {
+                if (mechanicRerolls[index] < rerollLimit) {
+                    mechanicRerolls[index]++;
+                    updateBox('mechanic', index);
+                }
+            } else {
+                if (themeRerolls[index] < themererollLimit) {
+                    themeRerolls[index]++;
+                    updateBox('theme', index);
+                }
+            }
+
+            // Disable button if limit reached
+            checkButtonStatus(type, index);
+        }
+
+        function checkButtonStatus(type, index) {
+            let currentCount;
+            let currentLimit;
+
+            if (type === 'mechanic') {
+                currentCount = mechanicRerolls[index];
+                currentLimit = rerollLimit;
+            } else {
+                currentCount = themeRerolls[index];
+                currentLimit = themererollLimit;
+            }
+
+            if (currentCount >= currentLimit) {
+                const btn = document.getElementById(`${type}-btn-${index}`);
+                if (btn) {
+                    btn.style.display = 'none'; // Hide the button
+                }
+            }
+        }
+
+        init();
 
 
     </script>
